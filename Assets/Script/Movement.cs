@@ -2,11 +2,76 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using TMPro;
+using Unity.Collections;
 public class Movement : NetworkBehaviour
 {
   public float speed = 0.5f;
   public float rotationSpeed = 0.5f;
   Rigidbody rb;
+  public TMP_Text namePrefab;
+  private TMP_Text nameLabel;
+
+  private NetworkVariable<int> posX = new NetworkVariable<int>(
+    0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+  public struct NetworkString : INetworkSerializable
+  {
+    public FixedString32Bytes info;
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+      serializer.SerializeValue(ref info);
+    }
+    public override string ToString()
+    {
+      return info.ToString();
+    }
+    public static implicit operator NetworkString(string v) =>
+      new NetworkString() { info = new FixedString32Bytes(v) };
+  }
+  private NetworkVariable<NetworkString> playerNameA = new NetworkVariable<NetworkString>(
+    new NetworkString { info = "Player" },
+    NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+  private NetworkVariable<NetworkString> playerNameB = new NetworkVariable<NetworkString>(
+  new NetworkString { info = "Player" },
+  NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+  public override void OnNetworkSpawn()
+  {
+    GameObject canvas = GameObject.FindWithTag("MainCanvas");
+    nameLabel = Instantiate(namePrefab, Vector3.zero, Quaternion.identity) as TMP_Text;
+    nameLabel.transform.SetParent(canvas.transform);
+    posX.OnValueChanged += (int previousValue, int newValue) =>
+    {
+      Debug.Log("Owner ID = " + OwnerClientId + ": Pos X = " + posX.Value);
+    };
+    if (IsServer)
+    {
+      playerNameA.Value = new NetworkString() { info = new FixedString32Bytes("Player1") };
+      playerNameB.Value = new NetworkString() { info = new FixedString32Bytes("Player2") };
+    }
+  }
+  void Update()
+  {
+    Vector3 nameLabelPos = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 2.5f, 0));
+    nameLabel.text = gameObject.name;
+    nameLabel.transform.position = nameLabelPos;
+    if (IsOwner)
+    {
+      posX.Value = (int)System.Math.Ceiling(transform.position.x);
+    }
+    UpdatePlayerPrefab();
+  }
+  void UpdatePlayerPrefab()
+  {
+    if (IsOwnedByServer) { nameLabel.text = playerNameA.Value.ToString(); }
+    else { nameLabel.text = playerNameB.Value.ToString(); }
+
+  }
+  public override void OnDestroy()
+  {
+    if (nameLabel != null) Destroy(nameLabel.gameObject);
+    base.OnDestroy();
+  }
   void Start()
   {
     rb = this.GetComponent<Rigidbody>();

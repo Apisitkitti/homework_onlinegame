@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class HelperScript
 {
-  public static string delimiter = ",";
+  public static string delimiter = ":";
 
   public static string CombineStrings(string[] inputStrings)
   {
