@@ -11,7 +11,7 @@ public class Movement : NetworkBehaviour
   Rigidbody rb;
   public TMP_Text namePrefab;
   private TMP_Text nameLabel;
-
+  private LoginManager loginManager;
   private NetworkVariable<int> posX = new NetworkVariable<int>(
     0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
   public struct NetworkString : INetworkSerializable
@@ -30,10 +30,10 @@ public class Movement : NetworkBehaviour
   }
   private NetworkVariable<NetworkString> playerNameA = new NetworkVariable<NetworkString>(
     new NetworkString { info = "Player" },
-    NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
   private NetworkVariable<NetworkString> playerNameB = new NetworkVariable<NetworkString>(
   new NetworkString { info = "Player" },
-  NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+  NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
   public override void OnNetworkSpawn()
   {
@@ -44,10 +44,15 @@ public class Movement : NetworkBehaviour
     {
       Debug.Log("Owner ID = " + OwnerClientId + ": Pos X = " + posX.Value);
     };
-    if (IsServer)
+    if (IsOwner)
     {
-      playerNameA.Value = new NetworkString() { info = new FixedString32Bytes("Player1") };
-      playerNameB.Value = new NetworkString() { info = new FixedString32Bytes("Player2") };
+      loginManager = GameObject.FindObjectOfType<LoginManager>();
+      if (loginManager != null)
+      {
+        string name = loginManager.userNameInputField.text;
+        if (IsOwnedByServer) { playerNameA.Value = name; }
+        else { playerNameB.Value = name; }
+      }
     }
   }
   void Update()
