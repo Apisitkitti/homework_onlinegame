@@ -13,7 +13,6 @@ public class Movement : NetworkBehaviour
   public TMP_Text namePrefab;
   private TMP_Text nameLabel;
   private LoginManager loginManager;
-  private Renderer ren_color;
 
   private NetworkVariable<int> posX = new NetworkVariable<int>(
     0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
@@ -68,15 +67,12 @@ public class Movement : NetworkBehaviour
     nameLabel.transform.position = nameLabelPos;
     if (IsOwner)
     {
-      posX.Value = (int)System.Math.Ceiling(transform.position.x);
-
-    }
-    if (IsOwner)
-    {
       if (Input.GetKeyDown(KeyCode.F))
       {
         isOfflineStatus.Value = !isOfflineStatus.Value;
       }
+      posX.Value = (int)System.Math.Ceiling(transform.position.x);
+
     }
     UpdatePlayerPrefab();
     ChangeColor();
