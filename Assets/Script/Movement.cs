@@ -6,14 +6,20 @@ using TMPro;
 using Unity.Collections;
 public class Movement : NetworkBehaviour
 {
+  [SerializeField] GameObject statusObject;
   public float speed = 0.5f;
   public float rotationSpeed = 0.5f;
   Rigidbody rb;
   public TMP_Text namePrefab;
   private TMP_Text nameLabel;
   private LoginManager loginManager;
+  private Renderer ren_color;
+
   private NetworkVariable<int> posX = new NetworkVariable<int>(
     0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+  private NetworkVariable<bool> isOfflineStatus = new NetworkVariable<bool>(
+    false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner
+  );
   public struct NetworkString : INetworkSerializable
   {
     public FixedString32Bytes info;
@@ -63,12 +69,24 @@ public class Movement : NetworkBehaviour
     if (IsOwner)
     {
       posX.Value = (int)System.Math.Ceiling(transform.position.x);
+
+    }
+    if (IsOwner)
+    {
+      if (Input.GetKeyDown(KeyCode.F))
+      {
+        isOfflineStatus.Value = !isOfflineStatus.Value;
+      }
     }
     UpdatePlayerPrefab();
+    ChangeColor();
   }
   void UpdatePlayerPrefab()
   {
-    if (IsOwnedByServer) { nameLabel.text = playerNameA.Value.ToString(); }
+    if (IsOwnedByServer)
+    {
+      nameLabel.text = playerNameA.Value.ToString();
+    }
     else { nameLabel.text = playerNameB.Value.ToString(); }
 
   }
@@ -80,6 +98,7 @@ public class Movement : NetworkBehaviour
   void Start()
   {
     rb = this.GetComponent<Rigidbody>();
+    loginManager = GameObject.FindAnyObjectByType<LoginManager>();
   }
   void FixedUpdate()
   {
@@ -104,6 +123,20 @@ public class Movement : NetworkBehaviour
       {
         rb.angularVelocity = Vector3.zero;
       }
+    }
+  }
+  void ChangeColor()
+  {
+    if (IsOwnedByServer && OwnerClientId == 0)
+    {
+      if (isOfflineStatus.Value) { gameObject.GetComponentInChildren<Renderer>().material = loginManager.statusObjectColor[1]; }
+      else { statusObject.GetComponent<Renderer>().material = loginManager.statusObjectColor[0]; }
+
+    }
+    else
+    {
+      if (isOfflineStatus.Value) { gameObject.GetComponentInChildren<Renderer>().material = loginManager.statusObjectColor[1]; }
+      else { statusObject.GetComponent<Renderer>().material = loginManager.statusObjectColor[0]; }
     }
   }
 }

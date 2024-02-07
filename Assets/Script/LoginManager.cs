@@ -12,13 +12,14 @@ using QFSW.QC.Parsers;
 using System.Net.Http.Headers;
 using System.ComponentModel;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEngine.UI;
 
 public class LoginManager : MonoBehaviour
 {
   public TMP_InputField userNameInputField;
   public TMP_InputField passCodeInputField;
   public TMP_Dropdown skinSelector;
-
+  public List<Material> statusObjectColor;
   public GameObject loginPannel;
   public GameObject leaveButton;
   public List<GameObject> spawnPoint;

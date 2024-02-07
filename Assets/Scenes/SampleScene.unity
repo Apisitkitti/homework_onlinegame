@@ -2032,6 +2032,9 @@ MonoBehaviour:
   userNameInputField: {fileID: 5577934139295567625}
   passCodeInputField: {fileID: 5577934139295567624}
   skinSelector: {fileID: 987020077}
+  statusObjectColor:
+  - {fileID: 2100000, guid: fb43fc64e1845d24e81d7e779246a3de, type: 2}
+  - {fileID: 2100000, guid: 77f6680f32ed0ef449fdeea79b5272be, type: 2}
   loginPannel: {fileID: 121118558}
   leaveButton: {fileID: 360976228}
   spawnPoint:
