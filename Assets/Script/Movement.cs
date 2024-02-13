@@ -33,10 +33,10 @@ public class Movement : NetworkBehaviour
     public static implicit operator NetworkString(string v) =>
       new NetworkString() { info = new FixedString32Bytes(v) };
   }
-  private NetworkVariable<NetworkString> playerNameA = new NetworkVariable<NetworkString>(
+  public NetworkVariable<NetworkString> playerNameA = new NetworkVariable<NetworkString>(
     new NetworkString { info = "Player" },
     NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-  private NetworkVariable<NetworkString> playerNameB = new NetworkVariable<NetworkString>(
+  public NetworkVariable<NetworkString> playerNameB = new NetworkVariable<NetworkString>(
   new NetworkString { info = "Player" },
   NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
@@ -71,11 +71,31 @@ public class Movement : NetworkBehaviour
       {
         isOfflineStatus.Value = !isOfflineStatus.Value;
       }
-      posX.Value = (int)System.Math.Ceiling(transform.position.x);
+      if (Input.GetKeyDown(KeyCode.Space))
+      {
+        TestServerRpc("Hello", new ServerRpcParams());
+      }
+      if (Input.GetKeyDown(KeyCode.L))
+      {
+        ClientRpcSendParams clientRpcSendParams = new ClientRpcSendParams { TargetClientIds = new List<ulong> { 1 } };
+        ClientRpcParams clientRpcParams = new ClientRpcParams { Send = clientRpcSendParams };
+        TestClientRpc("Hi,this is Server", clientRpcParams);
+      }
+
 
     }
     UpdatePlayerPrefab();
     ChangeColor();
+  }
+  [ServerRpc]
+  private void TestServerRpc(string msg, ServerRpcParams servertRpcParams)
+  {
+    Debug.Log("test server rpc from server" + msg);
+  }
+  [ClientRpc]
+  private void TestClientRpc(string msg, ClientRpcParams clientRpcParams)
+  {
+    Debug.Log("test server rpc from client" + msg);
   }
   void UpdatePlayerPrefab()
   {
@@ -133,6 +153,20 @@ public class Movement : NetworkBehaviour
     {
       if (isOfflineStatus.Value) { gameObject.GetComponentInChildren<Renderer>().material = loginManager.statusObjectColor[1]; }
       else { statusObject.GetComponent<Renderer>().material = loginManager.statusObjectColor[0]; }
+    }
+  }
+  private void OnEnable()
+  {
+    if (nameLabel != null)
+    {
+      nameLabel.enabled = true;
+    }
+  }
+  private void OnDisable()
+  {
+    if (nameLabel != null)
+    {
+      nameLabel.enabled = false;
     }
   }
 }

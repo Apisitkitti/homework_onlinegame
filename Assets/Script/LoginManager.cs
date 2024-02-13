@@ -22,8 +22,10 @@ public class LoginManager : MonoBehaviour
   public List<Material> statusObjectColor;
   public GameObject loginPannel;
   public GameObject leaveButton;
+  public GameObject scorePanel;
   public List<GameObject> spawnPoint;
   public List<uint> AlternativePlayerPrefabs;
+
   private int room_id = 0;
 
   void Start()
@@ -31,9 +33,22 @@ public class LoginManager : MonoBehaviour
     NetworkManager.Singleton.OnServerStarted += HandleServerStarted;
     NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
     NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnect;
-    loginPannel.SetActive(true);
-    leaveButton.SetActive(false);
-
+    SetUIVisible(false);
+  }
+  public void SetUIVisible(bool isUserLogin)
+  {
+    if (isUserLogin)
+    {
+      loginPannel.SetActive(false);
+      scorePanel.SetActive(true);
+      leaveButton.SetActive(true);
+    }
+    else
+    {
+      loginPannel.SetActive(true);
+      scorePanel.SetActive(false);
+      leaveButton.SetActive(false);
+    }
   }
 
   private void HandleClientDisconnect(ulong clientId)
@@ -48,8 +63,7 @@ public class LoginManager : MonoBehaviour
     Debug.Log("HandleClientConnect client ID = " + clientId);
     if (clientId == NetworkManager.Singleton.LocalClientId)
     {
-      loginPannel.SetActive(false);
-      leaveButton.SetActive(true);
+      SetUIVisible(true);
     }
 
   }
@@ -64,8 +78,7 @@ public class LoginManager : MonoBehaviour
     {
       NetworkManager.Singleton.Shutdown();
     }
-    loginPannel.SetActive(true);
-    leaveButton.SetActive(false);
+    SetUIVisible(false);
   }
 
   private void HandleServerStarted()
