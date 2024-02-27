@@ -208,6 +208,10 @@ public class LoginManager : MonoBehaviour
     {
       return 2;
     }
+    else if (skinSelector.GetComponent<TMP_Dropdown>().value == 3)
+    {
+      return 3;
+    }
     return 0;
 
   }

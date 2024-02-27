@@ -46,28 +46,41 @@ public class HPPlayerScript : NetworkBehaviour
   private void OnCollisionEnter(Collision collision)
   {
     if (!IsLocalPlayer) return;
-
     if (collision.gameObject.tag == "DeathZone")
     {
       if (IsOwnedByServer)
       {
-        hpP1.Value--;
-        if (hpP1.Value == 0)
-        {
-          gameObject.GetComponent<PlayerSpawnerScript>().Respawn();
-          hpP1.Value = 5;
-        }
+        gameObject.GetComponent<PlayerSpawnerScript>().Respawn();
+        hpP1.Value = 5;
       }
       else
       {
-        hpP2.Value--;
-        if (hpP2.Value == 0)
-        {
-          gameObject.GetComponent<PlayerSpawnerScript>().Respawn();
-          hpP2.Value = 5;
-        }
-      }
+        gameObject.GetComponent<PlayerSpawnerScript>().Respawn();
+        hpP2.Value = 5;
 
+      }
+      if (collision.gameObject.tag == "Bomb" || collision.gameObject.tag == "Pistol")
+      {
+        if (IsOwnedByServer)
+        {
+          hpP1.Value--;
+          if (hpP1.Value == 0)
+          {
+            gameObject.GetComponent<PlayerSpawnerScript>().Respawn();
+            hpP1.Value = 5;
+          }
+        }
+        else
+        {
+          hpP2.Value--;
+          if (hpP2.Value == 0)
+          {
+            gameObject.GetComponent<PlayerSpawnerScript>().Respawn();
+            hpP2.Value = 5;
+          }
+        }
+
+      }
     }
   }
 }

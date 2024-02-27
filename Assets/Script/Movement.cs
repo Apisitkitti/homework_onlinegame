@@ -116,31 +116,31 @@ public class Movement : NetworkBehaviour
     rb = this.GetComponent<Rigidbody>();
     loginManager = GameObject.FindAnyObjectByType<LoginManager>();
   }
-  void FixedUpdate()
-  {
-    playerMovement();
-  }
-  void playerMovement()
-  {
-    if (IsOwner)
-    {
-      float translation = Input.GetAxis("Vertical") * speed;
-      translation *= Time.deltaTime;
-      rb.MovePosition(rb.position + this.transform.forward * translation);
+  // void FixedUpdate()
+  // {
+  //   playerMovement();
+  // }
+  // void playerMovement()
+  // {
+  //   if (IsOwner)
+  //   {
+  //     float translation = Input.GetAxis("Vertical") * speed;
+  //     translation *= Time.deltaTime;
+  //     rb.MovePosition(rb.position + this.transform.forward * translation);
 
-      float rotation = Input.GetAxis("Horizontal");
-      if (rotation != 0)
-      {
-        rotation *= rotationSpeed;
-        Quaternion turn = Quaternion.Euler(0f, rotation, 0f);
-        rb.MoveRotation(rb.rotation * turn);
-      }
-      else
-      {
-        rb.angularVelocity = Vector3.zero;
-      }
-    }
-  }
+  //     float rotation = Input.GetAxis("Horizontal");
+  //     if (rotation != 0)
+  //     {
+  //       rotation *= rotationSpeed;
+  //       Quaternion turn = Quaternion.Euler(0f, rotation, 0f);
+  //       rb.MoveRotation(rb.rotation * turn);
+  //     }
+  //     else
+  //     {
+  //       rb.angularVelocity = Vector3.zero;
+  //     }
+  //   }
+  // }
   void ChangeColor()
   {
     if (IsOwnedByServer && OwnerClientId == 0)

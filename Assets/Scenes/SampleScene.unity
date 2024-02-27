@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: f13b6e3fe20f0bc45a623a55ece99cd2, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -826,7 +826,7 @@ MonoBehaviour:
     EnableNetworkLogs: 1
     OldPrefabList: []
   RunInBackground: 1
-  LogLevel: 0
+  LogLevel: 1
 --- !u!4 &769786814
 Transform:
   m_ObjectHideFlags: 0
@@ -1046,7 +1046,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 224130951485110974, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000015258789
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224166536479716514, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1756,6 +1756,8 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: SKIN C
       m_Image: {fileID: 0}
+    - m_Text: SKIN D
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -2300,7 +2302,7 @@ MonoBehaviour:
   - {fileID: 1426507918}
   - {fileID: 351708974}
   - {fileID: 1886400839}
-  AlternativePlayerPrefabs: 6d6371937b29f3df9737d143
+  AlternativePlayerPrefabs: 6d6371937b29f3df9737d14397d305d9
 --- !u!4 &1395339243
 Transform:
   m_ObjectHideFlags: 0
