@@ -187,7 +187,7 @@ PrefabInstance:
       addedObject: {fileID: 5122070569464788842}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0ae3b83e3bcf97b4fa2b4c80daf57488, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3408974470310179127}
+      addedObject: {fileID: -4992203159465711061}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0ae3b83e3bcf97b4fa2b4c80daf57488, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8272760405587088342}
@@ -259,7 +259,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &3408974470310179127
+--- !u!114 &-4992203159465711061
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3641037719
+  GlobalObjectIdHash: 2022812272
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -294,6 +294,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   rotationSpeed: 10
+  Jumpforce: 27.6
 --- !u!136 &5842894881152015859
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -314,9 +315,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.32408747
-  m_Height: 0.64817494
+  m_Height: 2.0871177
   m_Direction: 1
-  m_Center: {x: 0, y: 0.34856728, z: -0.018187076}
+  m_Center: {x: 0, y: 1.0680387, z: -0.018187076}
 --- !u!114 &8985840133282037853
 MonoBehaviour:
   m_ObjectHideFlags: 0

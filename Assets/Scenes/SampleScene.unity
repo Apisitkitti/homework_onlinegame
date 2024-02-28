@@ -2302,7 +2302,7 @@ MonoBehaviour:
   - {fileID: 1426507918}
   - {fileID: 351708974}
   - {fileID: 1886400839}
-  AlternativePlayerPrefabs: 6d6371937b29f3df9737d14397d305d9
+  AlternativePlayerPrefabs: 70aa91787b29f3df9737d1439f39d200
 --- !u!4 &1395339243
 Transform:
   m_ObjectHideFlags: 0

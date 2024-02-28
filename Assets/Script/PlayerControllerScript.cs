@@ -10,6 +10,7 @@ public class PlayerControllerScript : NetworkBehaviour
   public float speed = 5.0f;
   public float rotationSpeed = 10.0f;
 
+  public float Jumpforce = 10f;
   private Animator animator;
   private Rigidbody rb;
   private bool running;
@@ -62,10 +63,25 @@ public class PlayerControllerScript : NetworkBehaviour
       rb.angularVelocity = Vector3.zero;
     }
   }
+  void Jump()
+  {
+
+    rb.AddForce(transform.up * Jumpforce);
+  }
+
+
 
   private void FixedUpdate()
   {
-    moveForward();
-    turn();
+    if (IsOwner)
+    {
+      moveForward();
+      turn();
+      if (Input.GetKeyDown(KeyCode.Space))
+      {
+        Jump();
+      }
+    }
+
   }
 }
