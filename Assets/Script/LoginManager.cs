@@ -1,22 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
-using QFSW.QC;
 using TMPro;
-using System;
-using System.Linq;
-using Unity.VisualScripting;
-using Unity.Mathematics;
-using QFSW.QC.Parsers;
-using System.Net.Http.Headers;
-using System.ComponentModel;
-using System.Runtime.InteropServices.WindowsRuntime;
-using UnityEngine.UI;
+using Unity.Netcode.Transports.UTP;
+
 
 public class LoginManager : MonoBehaviour
 {
   public TMP_InputField userNameInputField;
+  public string ipAddress = "127.0.0.1";
+  UnityTransport transport;
+  public TMP_InputField ipInputField;
   public TMP_InputField passCodeInputField;
   public TMP_Dropdown skinSelector;
   public List<Material> statusObjectColor;
@@ -93,13 +87,29 @@ public class LoginManager : MonoBehaviour
     NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
     NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnect;
   }
+  private void setIpAddress()
+  {
+    transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+    ipAddress = ipInputField.GetComponent<TMP_InputField>().text;
+    transport.ConnectionData.Address = ipAddress;
+  }
   public void Host()
   {
+    setIpAddress();
     NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
     NetworkManager.Singleton.StartHost();
     room_id = int.Parse(passCodeInputField.GetComponent<TMP_InputField>().text);
-
     Debug.Log("start host");
+  }
+  public void Client()
+  {
+    setIpAddress();
+    string userName = userNameInputField.GetComponent<TMP_InputField>().text;
+    int userPasscode = int.Parse(passCodeInputField.GetComponent<TMP_InputField>().text);
+    int playerSkin = skinSelected();
+    NetworkManager.Singleton.NetworkConfig.ConnectionData = System.Text.Encoding.ASCII.GetBytes(userName + ":" + userPasscode + ":" + playerSkin);
+    NetworkManager.Singleton.StartClient();
+    Debug.Log("start client");
   }
   private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
   {
@@ -170,15 +180,7 @@ public class LoginManager : MonoBehaviour
     response.Rotation = spawnRo;
 
   }
-  public void Client()
-  {
-    string userName = userNameInputField.GetComponent<TMP_InputField>().text;
-    int userPasscode = int.Parse(passCodeInputField.GetComponent<TMP_InputField>().text);
-    int playerSkin = skinSelected();
-    NetworkManager.Singleton.NetworkConfig.ConnectionData = System.Text.Encoding.ASCII.GetBytes(userName + ":" + userPasscode + ":" + playerSkin);
-    NetworkManager.Singleton.StartClient();
-    Debug.Log("start client");
-  }
+
   public bool ApproveConnection(string clientUsername, string hostUsername, int passcode)
   {
     bool isApprove = System.String.Equals(clientUsername.Trim(), hostUsername.Trim()) ? false : true;

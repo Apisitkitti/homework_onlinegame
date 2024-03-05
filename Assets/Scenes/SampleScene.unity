@@ -1046,7 +1046,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 224130951485110974, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -0.000015258789
       objectReference: {fileID: 0}
     - target: {fileID: 224166536479716514, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2302,7 +2302,7 @@ MonoBehaviour:
   - {fileID: 1426507918}
   - {fileID: 351708974}
   - {fileID: 1886400839}
-  AlternativePlayerPrefabs: 70aa91787b29f3df9737d1439f39d200
+  AlternativePlayerPrefabs: e6b60c337b29f3df9737d143ff4ef2a0
 --- !u!4 &1395339243
 Transform:
   m_ObjectHideFlags: 0
