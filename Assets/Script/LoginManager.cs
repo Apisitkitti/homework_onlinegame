@@ -3,14 +3,13 @@ using UnityEngine;
 using Unity.Netcode;
 using TMPro;
 using Unity.Netcode.Transports.UTP;
+using Unity.Services.Relay;
 
 
 public class LoginManager : MonoBehaviour
 {
   public TMP_InputField userNameInputField;
-  public string ipAddress = "127.0.0.1";
   UnityTransport transport;
-  public TMP_InputField ipInputField;
   public TMP_InputField passCodeInputField;
   public TMP_Dropdown skinSelector;
   public List<Material> statusObjectColor;
@@ -87,23 +86,34 @@ public class LoginManager : MonoBehaviour
     NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
     NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnect;
   }
-  private void setIpAddress()
+  // private void setIpAddress()
+  // {
+  //   transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+  //   ipAddress = ipInputField.GetComponent<TMP_InputField>().text;
+  //   transport.ConnectionData.Address = ipAddress;
+  // }
+  public async void Host()
   {
-    transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-    ipAddress = ipInputField.GetComponent<TMP_InputField>().text;
-    transport.ConnectionData.Address = ipAddress;
-  }
-  public void Host()
-  {
-    setIpAddress();
+    if (RelayManagerScript.Instance.IsRelayEnabled)
+    {
+      await RelayManagerScript.Instance.CreateRelay();
+    }
+    // setIpAddress();
     NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
     NetworkManager.Singleton.StartHost();
     room_id = int.Parse(passCodeInputField.GetComponent<TMP_InputField>().text);
     Debug.Log("start host");
   }
-  public void Client()
+  public TMP_InputField joinCodeInputField;
+  private string joinCode;
+  public async void Client()
   {
-    setIpAddress();
+    // setIpAddress();
+    joinCode = joinCodeInputField.GetComponent<TMP_InputField>().text;
+    if (RelayManagerScript.Instance.IsRelayEnabled && !string.IsNullOrEmpty(joinCode))
+    {
+      await RelayManagerScript.Instance.JoinRelay(joinCode);
+    }
     string userName = userNameInputField.GetComponent<TMP_InputField>().text;
     int userPasscode = int.Parse(passCodeInputField.GetComponent<TMP_InputField>().text);
     int playerSkin = skinSelected();
